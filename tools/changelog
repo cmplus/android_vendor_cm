@@ -28,6 +28,6 @@ k=$(expr $i - 1)
 	echo >> $Changelog;
 done
 
-cp $Changelog $ANDROID_BUILD_TOP/vendor/cm/toolsCHANGELOG-CM.txt
+cp $Changelog $ANDROID_BUILD_TOP/vendor/cm/tools/CHANGELOG-CM.txt
 
 
