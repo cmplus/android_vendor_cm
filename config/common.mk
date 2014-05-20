@@ -113,6 +113,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/base/data/keyboards/Vendor_045e_Product_028e.kl:system/usr/keylayout/Vendor_045e_Product_0719.kl
 
+# statistics
+PRODUCT_COPY_FILES += \
+    vendor/cm/prebuilt/common/apps/Stats.apk:system/app/cmpstats.apk \
+
 # This is CM!
 PRODUCT_COPY_FILES += \
     vendor/cm/config/permissions/com.cyanogenmod.android.xml:system/etc/permissions/com.cyanogenmod.android.xml
@@ -143,7 +147,7 @@ PRODUCT_PACKAGES += \
     Apollo \
     CMFileManager \
     LockClock \
-    CMUpdater \
+    OTAUpdateCenter \
     CMFota \
     CMAccount
 
@@ -317,6 +321,19 @@ endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
   ro.cm.display.version=$(CM_DISPLAY_VERSION)
+
+# statistics identity
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.romstats.url=http://www.drdevs.com/stats/steve/ \
+    ro.romstats.name=CM Plus+ \
+    ro.romstats.version=$(CM_DISPLAY_VERSION) \
+    ro.romstats.askfirst=0 \
+    ro.romstats.tframe=1
+    
+# OTA
+PRODUCT_PROPERTY_OVERRIDES += \
+    otaupdater.otatime=$(shell date +%Y%m%d)-0001 \
+    otaupdater.otaver=CM+-$(shell date +%Y%m%d)
 
 -include $(WORKSPACE)/build_env/image-auto-bits.mk
 
