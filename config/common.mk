@@ -325,7 +325,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # statistics identity
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.romstats.url=http://www.drdevs.com/stats/steve/ \
-    ro.romstats.name=CM Plus+ \
+    ro.romstats.name=CMPlus \
     ro.romstats.version=$(CM_DISPLAY_VERSION) \
     ro.romstats.askfirst=0 \
     ro.romstats.tframe=1
