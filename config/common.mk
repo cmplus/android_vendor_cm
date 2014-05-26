@@ -149,7 +149,8 @@ PRODUCT_PACKAGES += \
     LockClock \
     OTAUpdateCenter \
     CMFota \
-    CMAccount
+    CMAccount \
+    OmniSwitch
 
 # CM Hardware Abstraction Framework
 PRODUCT_PACKAGES += \
