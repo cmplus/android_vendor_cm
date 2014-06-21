@@ -150,7 +150,8 @@ PRODUCT_PACKAGES += \
     OTAUpdateCenter \
     CMFota \
     CMAccount \
-    OmniSwitch
+    OmniSwitch \
+    CMHome
 
 # CM Hardware Abstraction Framework
 PRODUCT_PACKAGES += \
