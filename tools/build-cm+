@@ -1,0 +1,82 @@
+#!/bin/bash
+. vendor/cm/tools/colors
+IS_DARWIN=$(uname -a | grep Darwin)
+if [ -n "$IS_DARWIN" ]; then
+    CPUS=$(sysctl hw.ncpu | awk '{print $2}')
+    DATE=gdate
+else
+    CPUS=$(grep "^processor" /proc/cpuinfo | wc -l)
+    DATE=date
+fi
+echo -e ${cya}"Welcome to CM+..."${txtrst}
+echo -e ${cya}"" ${txtrst}
+t1=$($DATE +%s)
+echo -e ${cya}"" ${txtrst}
+echo -e ${cya}"Running envsetup.sh..."${txtrst}
+echo -e ${cya}"" ${txtrst}
+. build/envsetup.sh
+while getopts ":c:j:sl" opt; do
+  case $opt in
+   s)
+     echo -e ${cya}"" ${txtrst}
+     echo -e ${cya}"Syncing..."${txtrst}
+     echo -e ${cya}"" ${txtrst}
+      repo sync
+      ;;
+    j) opt_jobs="$OPTARG" ;;
+    l)
+     echo -e ${cya}"" ${txtrst}
+     echo -e ${cya}"Building Changelog...(this can take a few minutes)"${txtrst}
+     echo -e ${cya}"" ${txtrst}
+      . $ANDROID_BUILD_TOP/vendor/cm/tools/changelog
+      ;;
+    c) opt_clean="$OPTARG" ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+if [ "$#" -ne 1 ]; then
+    usage
+fi
+device="$1"
+cd /home/steve/cm+/vendor/cm;
+echo -e ${cya}"" ${txtrst}
+echo -e ${cya}"Fetching prebuilts..."${txtrst}
+echo -e ${cya}"" ${txtrst}
+./get-prebuilts;
+cd /home/steve/cm+;
+if [ "$opt_clean" -eq 1 ]; then
+    make clean >/dev/null
+    echo -e ""
+    echo -e ${cya}"Out directory has been cleaned"${txtrst}
+    echo -e ""
+elif [ "$opt_clean" -eq 2 ]; then
+    make dirty >/dev/null
+    echo -e ""
+    echo -e ${cya}"All zips and build.prop have been removed...Ridin' Dirty"${txtrst}
+    echo -e ""
+elif [ "$opt_clean" -eq 3 ]; then
+    make kernelclean >/dev/null
+    echo -e ""
+    echo -e ${cya}"All kernel components have been removed"${txtrst}
+    echo -e ""
+fi
+echo -e ${cya}"Now we can build CM+"${txtrst}
+breakfast $device;
+brunch $device -j"$opt_jobs";
+echo -e ${cya}"" ${txtrst}
+echo ${cya}"MD5 SUM:"
+md5sum $ANDROID_BUILD_TOP/out/target/product/$device/*CM_PLUS+-$device.zip | awk '{ print $1 }'
+echo -e ${cya}"" ${txtrst}
+# finished? get elapsed time
+t2=$($DATE +%s)
+
+tmin=$(( (t2-t1)/60 ))
+tsec=$(( (t2-t1)%60 ))
+
+echo -e ${cya}"Total time elapsed:${txtrst} ${cya}$tmin minutes $tsec seconds"${txtrst}
+
+
+
